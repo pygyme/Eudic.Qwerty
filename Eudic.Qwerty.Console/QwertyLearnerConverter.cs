@@ -1,11 +1,13 @@
 ﻿namespace Eudic.Qwerty.Console
 {
     using Eudic.Qwerty.Infrastructure.Services;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using JsonSerializer = System.Text.Json.JsonSerializer;
+    using System.Text.Encodings.Web;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using System.Text.Unicode;
 
     /// <summary>
     /// TXT文件转换成 https://qwerty.kaiyi.cool/ 网站使用的Json词典
@@ -80,7 +82,12 @@
         /// <param name="filename">JSON文件(使用绝对路径)</param>
         private void WriteToJson(List<WordObject> list, string filename)
         {
-            string json = JsonSerializer.Serialize(list);
+            var encoderSettings = new TextEncoderSettings();
+            encoderSettings.AllowRanges(UnicodeRanges.All);
+            var options = new JsonSerializerOptions();
+            options.Encoder = JavaScriptEncoder.Create(encoderSettings);
+            options.WriteIndented = true;
+            string json = JsonSerializer.Serialize(list, options);
             File.WriteAllText(filename, json);
         }
     }
@@ -90,10 +97,10 @@
     /// </summary>
     public class WordObject
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Word { get; set; }
 
-        [JsonProperty("trans")]
+        [JsonPropertyName("trans")]
         public List<string> Translation { get; set; }
     }
 }

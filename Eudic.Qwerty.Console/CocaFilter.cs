@@ -4,7 +4,9 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Text.Encodings.Web;
     using System.Text.Json;
+    using System.Text.Unicode;
 
     /// <summary>
     /// 筛选出COCA单词表中的动词、形容词
@@ -162,7 +164,12 @@
         /// <param name="filename">JSON文件(使用绝对路径)</param>
         private void WriteToJson(List<WordObject> list, string filename)
         {
-            string json = JsonSerializer.Serialize(list);
+            var encoderSettings = new TextEncoderSettings();
+            encoderSettings.AllowRanges(UnicodeRanges.All);
+            var options = new JsonSerializerOptions();
+            options.Encoder = JavaScriptEncoder.Create(encoderSettings);
+            options.WriteIndented = true;
+            string json = JsonSerializer.Serialize(list, options);
             File.WriteAllText(filename, json);
         }
 
