@@ -44,11 +44,15 @@ logger.LogInformation($"Starting application at: {DateTime.Now}");
 
 var dictService = services.GetService<IDictService>();
 var txtFile = configuration.GetValue<string>("InputTextFile");
-var converter = new QwertyLearnerConverter(dictService, txtFile);
-converter.Convert();
 
+var qwertyLearner = new QwertyLearner(dictService, txtFile);
+qwertyLearner.ConvertToJsonDict();
 
-// var filter = new CocaFilter(dictService, txtFile);
-// filter.FilterVerbToText();
+var filter = new CocaFilter(dictService, txtFile);
+filter.FilterVerbToText();
+filter.FilterVerbToJsonDict();
+
+filter.FilterAdjectiveToText();
+filter.FilterAdjectiveToJsonDict();
 
 await Task.Delay(1000);

@@ -12,26 +12,26 @@
     /// <summary>
     /// TXT文件转换成 https://qwerty.kaiyi.cool/ 网站使用的Json词典
     /// </summary>
-    public class QwertyLearnerConverter
+    public class QwertyLearner
     {
         private readonly IDictService _dictService;
         private readonly string _textFile;
 
         /// <summary>
-        /// QwertyLearnerConverter 构造函数
+        /// QwertyLearner 构造函数
         /// </summary>
         /// <param name="dictService">SQLite数据库服务</param>
         /// <param name="textFile">TXT文件(使用绝对路径)</param>
-        public QwertyLearnerConverter(IDictService dictService, string textFile)
+        public QwertyLearner(IDictService dictService, string textFile)
         {
             _dictService = dictService ?? throw new ArgumentNullException(nameof(dictService));
             _textFile = textFile;
         }
 
         /// <summary>
-        /// TXT文件转换成JSON词典
+        /// TXT文件转换成JSON词典, 写入到 TXT文件名-qwerty-learner.json
         /// </summary>
-        public void Convert()
+        public void ConvertToJsonDict()
         {
             var words = ProcessAllLine(_textFile);
             var list = new List<WordObject>();
@@ -49,10 +49,12 @@
                         ? new List<string>(){"词典内找不到翻译"}
                         : new List<string>(){dict.Translation}
                 });
+
+                Console.WriteLine($"Word selected ：{word}");
             }
 
 
-            WriteToJson(list, _textFile.Replace(".txt", "-dict.json"));
+            WriteToJson(list, _textFile.Replace(".txt", "-qwerty-learner.json"));
         }
 
         /// <summary>

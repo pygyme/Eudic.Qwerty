@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// 筛选出形容词, 写入到网站使用的Json文件
+        /// 筛选出动词, 以JSON词典格式, 写入到 TXT文件名-verb.json
         /// </summary>
         public void FilterVerbToJsonDict()
         {
@@ -50,6 +50,8 @@
                         Word = word,
                         Translation = new List<string>(){dict.Translation}
                     });
+
+                    Console.WriteLine($"Word selected ：{word}");
                 }
 
             }
@@ -59,7 +61,7 @@
 
 
         /// <summary>
-        /// 筛选出动词,写入到TXT文件-verb
+        /// 筛选出动词,写入到 TXT文件名-verb.txt
         /// </summary>
         public void FilterVerbToText()
         {
@@ -85,7 +87,7 @@
         }
 
         /// <summary>
-        /// 筛选出形容词, 写入到网站使用的Json文件
+        /// 筛选出形容词, 以JSON词典格式, 写入到 TXT文件名-adjective.json
         /// </summary>
         public void FilterAdjectiveToJsonDict()
         {
@@ -98,21 +100,23 @@
                 
                 var dict = _dictService?.GetDict(word);
 
-                if(dict is null || dict.Translation is null || !dict.Translation.Contains("adj.")) continue;
+                if(dict is null || dict.Translation is null || !dict.Translation.Contains("a.")) continue;
 
                 list.Add(new WordObject()
                 {
                     Word = word,
                     Translation = new List<string>(){dict.Translation}
                 });
+
+                Console.WriteLine($"Word selected ：{word}");
             }
 
 
-            WriteToJson(list, _textFile.Replace(".txt", "-adj.json"));
+            WriteToJson(list, _textFile.Replace(".txt", "-adjective.json"));
         }
 
         /// <summary>
-        /// 筛选出形容词,写入到TXT文件-adj
+        /// 筛选出形容词,写入到 TXT文件名-adjective.txt
         /// </summary>
         public void FilterAdjectiveToText()
         {
@@ -125,7 +129,7 @@
                 
                 var dict = _dictService?.GetDict(word);
 
-                if (dict is { Translation: { } } && (dict.Translation.Contains("adj.")))
+                if (dict is { Translation: { } } && (dict.Translation.Contains("a.")))
                 {
                     allVerb.Add(word);
 
@@ -134,7 +138,7 @@
             }
 
 
-            WriteToText(allVerb, _textFile.Replace(".txt", "-adj.txt"));
+            WriteToText(allVerb, _textFile.Replace(".txt", "-adjective.txt"));
         }
 
         /// <summary>
