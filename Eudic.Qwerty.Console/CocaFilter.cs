@@ -100,7 +100,7 @@
                 
                 var dict = _dictService?.GetDict(word);
 
-                if(dict is null || dict.Translation is null || !dict.Translation.Contains("a.")) continue;
+                if(dict is null || dict.Translation is null || !dict.Translation.Contains("a.") || !dict.Translation.Contains("adj.")) continue;
 
                 list.Add(new WordObject()
                 {
@@ -129,7 +129,7 @@
                 
                 var dict = _dictService?.GetDict(word);
 
-                if (dict is { Translation: { } } && (dict.Translation.Contains("a.")))
+                if (dict is { Translation: { } } && (dict.Translation.Contains("a.") || !dict.Translation.Contains("adj.")))
                 {
                     allVerb.Add(word);
 
